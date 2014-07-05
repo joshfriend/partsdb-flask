@@ -32,11 +32,47 @@ class Resistor(Part):
     __mapper_args__ = {'polymorphic_identity': __tablename__}
 
 
+class Capacitor(Part):
+    id = db.Column(db.Integer, db.ForeignKey('part.id'), primary_key=True)
+    value = db.Column(db.Float, default=0)
+    tolerance = db.Column(db.Float, default=0)
+    voltage = db.Column(db.Float, default=0)
+    __tablename__ = 'capacitor'
+    __mapper_args__ = {'polymorphic_identity': __tablename__}
+
+
+class PolarizedCapacitor(Part):
+    id = db.Column(db.Integer, db.ForeignKey('part.id'), primary_key=True)
+    value = db.Column(db.Float, default=0)
+    tolerance = db.Column(db.Float, default=0)
+    voltage = db.Column(db.Float, default=0)
+    esr = db.Column(db.Float, default=0)
+    ripple_current = db.Column(db.Float, default=0)
+    __tablename__ = 'polarized_capacitor'
+    __mapper_args__ = {'polymorphic_identity': __tablename__}
+
+
 class IC(Part):
     id = db.Column(db.Integer, db.ForeignKey('part.id'), primary_key=True)
     value = db.Column(db.String(64), default='')
     pin_count = db.Column(db.Integer)
     __tablename__ = 'ic'
+    __mapper_args__ = {'polymorphic_identity': __tablename__}
+
+
+class Transistor(Part):
+    id = db.Column(db.Integer, db.ForeignKey('part.id'), primary_key=True)
+    value = db.Column(db.String(64), default='')
+    pin_count = db.Column(db.Integer)
+    __tablename__ = 'transistor'
+    __mapper_args__ = {'polymorphic_identity': __tablename__}
+
+
+class Connector(Part):
+    id = db.Column(db.Integer, db.ForeignKey('part.id'), primary_key=True)
+    value = db.Column(db.String(64), default='')
+    pin_count = db.Column(db.Integer)
+    __tablename__ = 'connector'
     __mapper_args__ = {'polymorphic_identity': __tablename__}
 
 

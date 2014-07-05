@@ -1,0 +1,5 @@
+*.py[cod]
+*.db
+*.log
+tmp/
+env/
