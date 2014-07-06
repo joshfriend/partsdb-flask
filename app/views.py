@@ -1,16 +1,16 @@
 from flask import render_template, flash, redirect, abort, session, url_for, request, g
 from app import app, db
-from models import Part
+from models import Part, User, Symbol, Footprint
 from datetime import datetime
 
 @app.route('/')
 def index():
-    return 'home'
+    return render_template('index.html')
 
 @app.route('/part/')
 def parts():
     parts = Part.query
-    return render_template('index.html', title='All Parts', parts=parts)
+    return render_template('part_list.html', title='All Parts', parts=parts)
 
 @app.route('/part/<int:part_id>')
 def part(part_id=1):
@@ -23,7 +23,7 @@ def part(part_id=1):
 def edit_part(part_id=1):
     part = Part.query.filter_by(id=part_id).first()
     if part:
-        return 'edit part #%i' % part.id
+        return render_template('edit_part.html', part=part)
     abort(404)
 
 @app.route('/part/new')
@@ -41,22 +41,22 @@ def part_footprints(part_id=1):
         return 'part has no footprints'
     abort(404)
 
-@app.route('/part/<int:part_id>/footprints/<int:fp_num>')
-def part_footprint(part_id=1, fp_num=0):
+@app.route('/footprint/<int:id>')
+def footprint(id=0):
     try:
-        footprint = Part.query.filter_by(id=part_id).first().footprints.all()[fp_num - 1]
+        footprint = Footprint.query.filter_by(id=id).first()
         if footprint:
-            return 'footprint %s/%s' % (footprint.__class__.__name__, footprint.value)
+            return 'footprint %s/%s' % (footprint.__class__.__name__, footprint.name)
     except:
         pass
     abort(404)
 
-@app.route('/part/<int:part_id>/footprints/<int:fp_num>/edit')
-def edit_footprint(part_id=1, fp_num=0):
+@app.route('/footprint/<int:id>/edit')
+def edit_footprint(id=0):
     try:
-        footprint = Part.query.filter_by(id=part_id).first().footprints.all()[fp_num - 1]
+        footprint = Footprint.query.filter_by(id=id).first()
         if footprint:
-            return 'edit footprint %s/%s' % (footprint.__class__.__name__, footprint.value)
+            return 'edit footprint %s/%s' % (footprint.__class__.__name__, footprint.name)
     except:
         pass
     abort(404)
@@ -79,22 +79,22 @@ def part_symbols(part_id=1):
         return 'part has no symbols'
     abort(404)
 
-@app.route('/part/<int:part_id>/symbols/<int:sym_num>')
-def part_symbol(part_id=1, sym_num=0):
+@app.route('/symbol/<int:id>')
+def symbol(id=0):
     try:
-        symbol = Part.query.filter_by(id=part_id).first().symbols.all()[sym_num - 1]
+        symbol = Symbol.query.filter_by(id=id).first()
         if symbol:
-            return 'symbol %s/%s' % (symbol.__class__.__name__, symbol.value)
+            return 'symbol %s/%s' % (symbol.__class__.__name__, symbol.name)
     except:
         pass
     abort(404)
 
-@app.route('/part/<int:part_id>/symbols/<int:sym_num>/edit')
-def edit_symbol(part_id=1, sym_num=0):
+@app.route('/symbol/<int:id>/edit')
+def edit_symbol(id=0):
     try:
-        symbol = Part.query.filter_by(id=part_id).first().symbols.all()[sym_num - 1]
+        symbol = Symbol.query.filter_by(id=id).first()
         if symbol:
-            return 'edit symbol %s/%s' % (symbol.__class__.__name__, symbol.value)
+            return 'edit symbol %s/%s' % (symbol.__class__.__name__, symbol.name)
     except:
         pass
     abort(404)
@@ -170,6 +170,13 @@ def part_manufacturer(part_id=1):
         pass
     abort(404)
 
+@app.route('/u/<username>')
+def user(username):
+    u = User.query.filter_by(name=username).first()
+    if u:
+        return render_template('user.html', user=u)
+    abort(404)
+
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html'), 404
@@ -178,3 +185,40 @@ def not_found_error(error):
 def internal_error(error):
     db.session.rollback()
     return render_template('500.html'), 500
+
+@app.template_filter()
+def friendly_time(dt, past_="ago",
+    future_="from now",
+    default="just now"):
+    """
+    Returns string representing "time since"
+    or "time until" e.g.
+    3 days ago, 5 hours from now etc.
+    """
+
+    now = datetime.utcnow()
+    if now > dt:
+        diff = now - dt
+        dt_is_past = True
+    else:
+        diff = dt - now
+        dt_is_past = False
+
+    periods = (
+        (diff.days / 365, "year", "years"),
+        (diff.days / 30, "month", "months"),
+        (diff.days / 7, "week", "weeks"),
+        (diff.days, "day", "days"),
+        (diff.seconds / 3600, "hour", "hours"),
+        (diff.seconds / 60, "minute", "minutes"),
+        (diff.seconds, "second", "seconds"),
+    )
+
+    for period, singular, plural in periods:
+
+        if period:
+            return "%d %s %s" % (period, \
+                singular if period == 1 else plural, \
+                past_ if dt_is_past else future_)
+
+    return default

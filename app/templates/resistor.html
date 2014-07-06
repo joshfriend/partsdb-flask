@@ -1,6 +1,6 @@
 <!-- extend base layout -->
-{% extends "base.html" %}
 
 {% block content %}
-<h1>Welcome to PartsDB!</h1>
+{% include 'flash.html' %}
+<h2>{{part}}</h2>
 {% endblock %}
