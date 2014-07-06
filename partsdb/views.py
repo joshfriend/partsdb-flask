@@ -11,25 +11,25 @@ def index():
 @app.route('/part/')
 def parts():
     parts = Part.query.all()
-    return render_template('part_list.html', title='All Parts', parts=parts)
+    return render_template('part/part_list.html', title='All Parts', parts=parts)
 
 @app.route('/part/<int:id>')
 def part(id=1):
     part = Part.query.filter_by(id=id).first()
     if part:
-        return render_template('part.html', title= '%s%i' % (part.type, part.id), part=part)
+        return render_template('part/part.html', title= '%s%i' % (part.type, part.id), part=part)
     abort(404)
 
 @app.route('/part/<int:id>/edit')
 def edit_part(id=1):
     part = Part.query.filter_by(id=id).first()
     if part:
-        return render_template('edit_part.html', part=part)
+        return render_template('part/edit_part.html', part=part)
     abort(404)
 
 @app.route('/part/new')
 def new_part():
-    return render_template('new_part.html')
+    return render_template('part/new_part.html')
 
 ## FOOTPRINTS
 
@@ -175,20 +175,20 @@ def part_manufacturer(id=1):
 @app.route('/users/')
 def users():
     users = User.query
-    return render_template('user_list.html', title='Users', users=users)
+    return render_template('user/user_list.html', title='Users', users=users)
 
 @app.route('/u/<username>')
 def user(username):
     u = User.query.filter_by(name=username).first()
     if u:
-        return render_template('user_profile.html', title=u.real_name, user=u)
+        return render_template('user/user_profile.html', title=u.real_name, user=u)
     abort(404)
 
 @app.route('/u/<username>/edit')
 def edit_user(username):
     u = User.query.filter_by(name=username).first()
     if u:
-        return render_template('edit_user.html', title='Edit Profile', user=u)
+        return render_template('user/edit_user.html', title='Edit Profile', user=u)
     abort(404)
 
 @app.errorhandler(404)

@@ -1,0 +1,12 @@
+<!-- extend base layout -->
+{% extends "part/types/base.html" %}
+{% block properties %}
+<tr>
+  <td>Value</td>
+  <td>{{part.value}}</td>
+</tr>
+<tr>
+  <td>Pin Count</td>
+  <td>{{part.pin_count}}</td>
+</tr>
+{% endblock %}

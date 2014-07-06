@@ -6,7 +6,7 @@
 {% for user_row in users | batch(6)%}
 <div class="row">
 {% for user in user_row %}
-{% include 'user.html' %}
+{% include 'user/user.html' %}
 {% endfor %}
 </div>
 {% endfor %}

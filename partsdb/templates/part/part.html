@@ -14,14 +14,14 @@
       <h3 class="panel-title">Properties</h3>
     </div>
     <div class="panel-body">
-      {% include '%s.html' % part.type %}
+      {% include 'part/types/%s.html' % part.type %}
     </div>
   </div>
 </div>
 <div class="col-md-5">
-  {% include 'part_symbols.html' %}
-  {% include 'part_footprints.html' %}
-  {% include 'part_vendors.html' %}
+  {% include 'part/part_symbols.html' %}
+  {% include 'part/part_footprints.html' %}
+  {% include 'part/part_vendors.html' %}
 </div>
 <div class="col-md-12">
   <div class="panel panel-info">

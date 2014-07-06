@@ -1,7 +1,6 @@
 <!-- extend base layout -->
 
 {% block content %}
-{% include 'flash.html' %}
 <table class="table table-striped table-hover ">
   <thead>
   </thead>
@@ -38,18 +37,7 @@
       <td>Manufacturer PN</td>
       <td>{{part.manufacturer.pn}}</td>
     </tr>
-    <tr>
-      <td>Value</td>
-      <td>{{part.value | to_si()}}Ω</td>
-    </tr>
-    <tr>
-      <td>Tolerance</td>
-      <td>{{part.tolerance | pretty_percent}}</td>
-    </tr>
-    <tr>
-      <td>Power</td>
-      <td>{{part.power | to_si('W')}}</td>
-    </tr>
+    {% block properties %}{% endblock %}
   </tbody>
 </table>
 {% endblock %}

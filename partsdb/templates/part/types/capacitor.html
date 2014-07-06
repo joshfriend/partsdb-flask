@@ -1,0 +1,16 @@
+<!-- extend base layout -->
+{% extends "part/types/base.html" %}
+{% block properties %}
+<tr>
+  <td>Value</td>
+  <td>{{part.value | to_si('F')}}</td>
+</tr>
+<tr>
+  <td>Tolerance</td>
+  <td>{{part.tolerance | pretty_percent}}</td>
+</tr>
+<tr>
+  <td>Voltage</td>
+  <td>{{part.voltage | to_si('V')}}</td>
+</tr>
+{% endblock %}
