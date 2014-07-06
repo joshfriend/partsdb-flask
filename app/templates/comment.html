@@ -1,0 +1,11 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <a href={{url_for('user', username=comment.author.name)}}>{{comment.author.real_name}}</a>
+    <div class="pull-right">
+      {{comment.created | friendly_time}}
+    </div>
+  </div>
+  <div class="panel-body">
+    {{comment.text | markdown}}
+  </div>
+</div>

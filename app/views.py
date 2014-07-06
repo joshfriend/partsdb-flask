@@ -2,6 +2,9 @@ from flask import render_template, flash, redirect, abort, session, url_for, req
 from app import app, db
 from models import Part, User, Symbol, Footprint
 from datetime import datetime
+import math
+import markdown
+from flask import Markup
 
 @app.route('/')
 def index():
@@ -117,20 +120,20 @@ def part_vendors(part_id=1):
         return 'part has no vendors'
     abort(404)
 
-@app.route('/part/<int:part_id>/vendors/<int:ven_num>')
-def part_vendor(part_id=1, ven_num=0):
+@app.route('/vendor/<int:id>')
+def vendor(id=0):
     try:
-        vendor = Part.query.filter_by(id=part_id).first().vendors.all()[ven_num - 1]
+        vendor = Vendor.query.filter_by(id=id).first()
         if vendor:
             return 'vendor %s %s' % (vendor.name, vendor.pn)
     except:
         pass
     abort(404)
 
-@app.route('/part/<int:part_id>/vendors/<int:ven_num>/edit')
-def edit_vendor(part_id=1, ven_num=0):
+@app.route('/vendor/<int:id>/edit')
+def edit_vendor(id=1):
     try:
-        vendor = Part.query.filter_by(id=part_id).first().vendors.all()[ven_num - 1]
+        vendor = Vendor.query.filter_by(id=id).first()
         if vendor:
             return 'edit vendor %s %s' % (vendor.name, vendor.pn)
     except:
@@ -222,3 +225,41 @@ def friendly_time(dt, past_="ago",
                 past_ if dt_is_past else future_)
 
     return default
+
+@app.template_filter()
+def to_si(d, units=''):
+    inc_prefixes = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
+    dec_prefixes = ['m', 'u', 'n', 'p', 'f', 'a', 'z', 'y']
+
+    degree = int(math.floor(math.log10(math.fabs(d)) / 3))
+
+    prefix = ''
+
+    if degree != 0:
+        ds = degree / math.fabs(degree)
+        if ds == 1:
+            if degree - 1 < len(inc_prefixes):
+                prefix = inc_prefixes[degree - 1]
+            else:
+                prefix = inc_prefixes[-1]
+                degree = len(inc_prefixes)
+
+        elif ds == -1:
+            if -degree - 1 < len(dec_prefixes):
+                prefix = dec_prefixes[-degree - 1]
+            else:
+                prefix = dec_prefixes[-1]
+                degree = -len(dec_prefixes)
+
+        scaled = float(d * math.pow(1000, -degree))
+
+        s = "{scaled}{prefix}{u}".format(scaled=scaled, prefix=prefix, u=units)
+
+    else:
+        s = "{d}{u}".format(d=d, u=units)
+
+    return(s)
+
+@app.template_filter()
+def pretty_percent(n):
+    return '{:.3%}'.format(n)

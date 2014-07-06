@@ -187,7 +187,9 @@ class Manufacturer(db.Model):
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     part_id = db.Column(db.Integer, db.ForeignKey('part.id'))
-    author = db.Column(db.Integer, db.ForeignKey('user.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    created = db.Column(db.DateTime)
+    edited = db.Column(db.DateTime)
     text = db.Column(db.String, default='')
 
 class User(db.Model):
@@ -201,6 +203,10 @@ class User(db.Model):
                             uselist=True,
                             backref='author',
                             lazy='dynamic')
+
+    comments = db.relationship('Comment',
+                               backref=db.backref('author', lazy='join'),
+                               lazy='dynamic')
 
     def avatar(self, size):
         return 'http://www.gravatar.com/avatar/' + md5(self.email).hexdigest() + '?d=mm&s=' + str(size)

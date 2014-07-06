@@ -2,5 +2,54 @@
 
 {% block content %}
 {% include 'flash.html' %}
-<h2>{{part}}</h2>
+<table class="table table-striped table-hover ">
+  <thead>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ID#</td>
+      <td>{{part.id}}</td>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td>{{part.type}}</td>
+    </tr>
+    <tr>
+      <td>Created By</td>
+      <td>
+        <a href={{url_for('user', username=part.author.name)}}>
+          {{part.author.real_name}}
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td>Created</td>
+      {% if part.created %}
+      <td>{{part.created | friendly_time}}</td>
+      {% else %}
+      <td>Unknown</td>
+      {% endif %}
+    </tr>
+    <tr>
+      <td>Manufacturer</td>
+      <td>{{part.manufacturer.name}}</td>
+    </tr>
+    <tr>
+      <td>Manufacturer PN</td>
+      <td>{{part.manufacturer.pn}}</td>
+    </tr>
+    <tr>
+      <td>Value</td>
+      <td>{{part.value | to_si()}}Ω</td>
+    </tr>
+    <tr>
+      <td>Tolerance</td>
+      <td>{{part.tolerance | to_si('W')}}</td>
+    </tr>
+    <tr>
+      <td>Power</td>
+      <td>{{part.power | pretty_percent}}</td>
+    </tr>
+  </tbody>
+</table>
 {% endblock %}

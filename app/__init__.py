@@ -2,10 +2,12 @@ import os
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from config import basedir
+from flaskext.markdown import Markdown
 
 app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
+Markdown(app)
 
 if not app.debug:
     import logging
