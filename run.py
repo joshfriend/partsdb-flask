@@ -1,3 +1,3 @@
 #!env/bin/python
-from app import app
+from partsdb import app
 app.run(debug=True)

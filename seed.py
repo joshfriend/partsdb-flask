@@ -1,12 +1,12 @@
 #!env/bin/python
 
 from datetime import datetime
-from app import db
-from app.models import Part, Resistor, Capacitor, IC
-from app.models import MentorFootprint, MentorSymbol
-from app.models import Vendor, Manufacturer
-from app.models import User
-from app.models import ROLE_ADMIN
+from partsdb import db
+from partsdb.models import Part, Resistor, Capacitor, IC
+from partsdb.models import MentorFootprint, MentorSymbol
+from partsdb.models import Vendor, Manufacturer
+from partsdb.models import User
+from partsdb.models import ROLE_ADMIN
 
 
 u = User(name='joshfriend',

@@ -1,4 +1,4 @@
-from app import app, db
+from partsdb import app, db
 from hashlib import md5
 
 MENTOR = 'mentor'

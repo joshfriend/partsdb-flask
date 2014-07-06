@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, abort, session, url_for, request, g
-from app import app, db
+from partsdb import app, db
 from models import Part, User, Symbol, Footprint
 from datetime import datetime
 import math
