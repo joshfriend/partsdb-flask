@@ -40,15 +40,11 @@
     </tr>
     <tr>
       <td>Value</td>
-      <td>{{part.value | to_si()}}Ω</td>
+      <td>{{part.value}}</td>
     </tr>
     <tr>
-      <td>Tolerance</td>
-      <td>{{part.tolerance | pretty_percent}}</td>
-    </tr>
-    <tr>
-      <td>Power</td>
-      <td>{{part.power | to_si('W')}}</td>
+      <td>Pin Count</td>
+      <td>{{part.pin_count}}</td>
     </tr>
   </tbody>
 </table>

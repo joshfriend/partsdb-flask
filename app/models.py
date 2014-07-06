@@ -192,6 +192,9 @@ class Comment(db.Model):
     edited = db.Column(db.DateTime)
     text = db.Column(db.String, default='')
 
+    def __repr__(self):
+        return '<%s @ %s>' % (self.author.name, self.created.strftime('%H:%M %m/%d/%Y'))
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), unique=True, index=True, nullable=False)

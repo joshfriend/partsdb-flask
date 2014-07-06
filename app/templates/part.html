@@ -23,7 +23,6 @@
   {% include 'part_footprints.html' %}
   {% include 'part_vendors.html' %}
 </div>
-{% if part.comments %}
 <div class="col-md-12">
   <div class="panel panel-info">
     <div class="panel-heading">
@@ -34,8 +33,7 @@
       {% include 'comment.html' %}
       {% endfor %}
     </div>
+    <!-- {% include 'new_comment.html' %} -->
   </div>
-  {% include 'new_comment.html' %}
 </div>
-{% endif %}
 {% endblock %}

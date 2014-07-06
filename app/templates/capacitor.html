@@ -40,15 +40,15 @@
     </tr>
     <tr>
       <td>Value</td>
-      <td>{{part.value | to_si()}}Ω</td>
+      <td>{{part.value | to_si('F')}}</td>
     </tr>
     <tr>
       <td>Tolerance</td>
       <td>{{part.tolerance | pretty_percent}}</td>
     </tr>
     <tr>
-      <td>Power</td>
-      <td>{{part.power | to_si('W')}}</td>
+      <td>Voltage</td>
+      <td>{{part.voltage | to_si('V')}}</td>
     </tr>
   </tbody>
 </table>

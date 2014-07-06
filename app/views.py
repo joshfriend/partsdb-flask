@@ -19,7 +19,7 @@ def parts():
 def part(part_id=1):
     part = Part.query.filter_by(id=part_id).first()
     if part:
-        return render_template('part.html', title= 'Part #%i' % part.id, part=part)
+        return render_template('part.html', title= '%s%i' % (part.type, part.id), part=part)
     abort(404)
 
 @app.route('/part/<int:part_id>/edit')
