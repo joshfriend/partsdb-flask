@@ -1,0 +1,13 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+{% include 'flash.html' %}
+{% for user_row in users | batch(6)%}
+<div class="row">
+{% for user in user_row %}
+{% include 'user.html' %}
+{% endfor %}
+</div>
+{% endfor %}
+{% endblock %}

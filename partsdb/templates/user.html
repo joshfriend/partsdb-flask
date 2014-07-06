@@ -1,15 +1,7 @@
-<!-- extend base layout -->
-{% extends "base.html" %}
-
-{% block content %}
-{% include 'flash.html' %}
-<div class="row featurette">
-  <div class="col-md-2">
-    <img class="featurette-image img-responsive" src="{{user.avatar(128)}}" alt="Avatar">
-  </div>
-  <div class="col-md-7">
-    <h2 class="featurette-heading">{{user.real_name}}</h2>
-    <p class="lead">Email: {{user.email}}</p>
-  </div>
+<div class="col-md-2">
+<center>
+<a href={{url_for('user', username=user.name)}}>
+<img class="img-responsive img-circle", src={{user.avatar(128)}}>{{user.real_name}}
+</a>
+</center>
 </div>
-{% endblock %}

@@ -2,7 +2,10 @@
   <div class="panel-heading">
     <a href={{url_for('user', username=comment.author.name)}}>{{comment.author.real_name}}</a>
     <a class="headerlink" href="#comment{{comment.id}}" title="Permalink to this comment">
-      <span class"text-muted">  ({{comment.created | friendly_time}})</span>
+      <span class"text-muted">  ({{comment.created | friendly_time}}
+      {%- if comment.edited -%}
+       - edited {{comment.edited | friendly_time}}
+      {%- endif -%})</span>
     </a>
     <div class="pull-right">
       <a class="btn btn-default btn-xs" href="#">

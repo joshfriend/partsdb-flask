@@ -2,7 +2,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>An unexpected error has occurred</h1>
-<p>The administrator has been notified. Sorry for the inconvenience!</p>
-<p><a href="{{url_for('index')}}">Back</a></p>
+<div class="span12">
+  <div class="jumbotron">
+    <div class="text-center">
+      <h1>500 Internal Server Error</h1>
+      <br />
+      <a href={{url_for('index')}} class="btn btn-large btn-danger"><i class="icon-home icon-white"></i> Home</a>
+    </div>
+  </div>
+</div>
 {% endblock %}

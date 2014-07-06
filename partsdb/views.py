@@ -3,8 +3,6 @@ from partsdb import app, db
 from models import Part, User, Symbol, Footprint
 from datetime import datetime
 import math
-import markdown
-from flask import Markup
 
 @app.route('/')
 def index():
@@ -12,19 +10,19 @@ def index():
 
 @app.route('/part/')
 def parts():
-    parts = Part.query
+    parts = Part.query.all()
     return render_template('part_list.html', title='All Parts', parts=parts)
 
-@app.route('/part/<int:part_id>')
-def part(part_id=1):
-    part = Part.query.filter_by(id=part_id).first()
+@app.route('/part/<int:id>')
+def part(id=1):
+    part = Part.query.filter_by(id=id).first()
     if part:
         return render_template('part.html', title= '%s%i' % (part.type, part.id), part=part)
     abort(404)
 
-@app.route('/part/<int:part_id>/edit')
-def edit_part(part_id=1):
-    part = Part.query.filter_by(id=part_id).first()
+@app.route('/part/<int:id>/edit')
+def edit_part(id=1):
+    part = Part.query.filter_by(id=id).first()
     if part:
         return render_template('edit_part.html', part=part)
     abort(404)
@@ -35,9 +33,9 @@ def new_part():
 
 ## FOOTPRINTS
 
-@app.route('/part/<int:part_id>/footprints/')
-def part_footprints(part_id=1):
-    footprints = Part.query.filter_by(id=part_id).first().footprints.all()
+@app.route('/part/<int:id>/footprints/')
+def part_footprints(id=1):
+    footprints = Part.query.filter_by(id=id).first().footprints.all()
     if footprints:
         return 'part has %i footprints' % len(footprints)
     else:
@@ -64,18 +62,18 @@ def edit_footprint(id=0):
         pass
     abort(404)
 
-@app.route('/part/<int:part_id>/footprints/new')
-def new_footprint(part_id=1):
-    part = Part.query.filter_by(id=part_id).first()
+@app.route('/part/<int:id>/footprints/new')
+def new_footprint(id=1):
+    part = Part.query.filter_by(id=id).first()
     if part:
         return 'create new footprint for part #%i' % part.id
     abort(404)
 
 ## Symbols
 
-@app.route('/part/<int:part_id>/symbols/')
-def part_symbols(part_id=1):
-    symbols = Part.query.filter_by(id=part_id).first().symbols.all()
+@app.route('/part/<int:id>/symbols/')
+def part_symbols(id=1):
+    symbols = Part.query.filter_by(id=id).first().symbols.all()
     if symbols:
         return 'part has %i symbols' % len(symbols)
     else:
@@ -102,18 +100,18 @@ def edit_symbol(id=0):
         pass
     abort(404)
 
-@app.route('/part/<int:part_id>/symbols/new')
-def new_symbol(part_id=1):
-    part = Part.query.filter_by(id=part_id).first()
+@app.route('/part/<int:id>/symbols/new')
+def new_symbol(id=1):
+    part = Part.query.filter_by(id=id).first()
     if part:
         return 'create new symbol for part #%i' % part.id
     abort(404)
 
 ## Vendors
 
-@app.route('/part/<int:part_id>/vendors/')
-def part_vendors(part_id=1):
-    vendors = Part.query.filter_by(id=part_id).first().vendors.all()
+@app.route('/part/<int:id>/vendors/')
+def part_vendors(id=1):
+    vendors = Part.query.filter_by(id=id).first().vendors.all()
     if vendors:
         return 'part has %i vendors' % len(vendors)
     else:
@@ -140,19 +138,19 @@ def edit_vendor(id=1):
         pass
     abort(404)
 
-@app.route('/part/<int:part_id>/vendors/new')
-def new_vendor(part_id=1):
-    part = Part.query.filter_by(id=part_id).first()
+@app.route('/part/<int:id>/vendors/new')
+def new_vendor(id=1):
+    part = Part.query.filter_by(id=id).first()
     if part:
         return 'create new vendor for part #%i' % part.id
     abort(404)
 
 ## Manufacturer
 
-@app.route('/part/<int:part_id>/manufacturer')
-def part_manufacturer(part_id=1):
+@app.route('/part/<int:id>/manufacturer')
+def part_manufacturer(id=1):
     try:
-        mfg = Part.query.filter_by(id=part_id).first().manufacturer
+        mfg = Part.query.filter_by(id=id).first().manufacturer
         if mfg:
             return 'manufacturer %s %s' % (mfg.name, mfg.pn)
         else:
@@ -161,10 +159,10 @@ def part_manufacturer(part_id=1):
         pass
     abort(404)
 
-@app.route('/part/<int:part_id>/manufacturer/edit')
-def part_manufacturer(part_id=1):
+@app.route('/part/<int:id>/manufacturer/edit')
+def part_manufacturer(id=1):
     try:
-        mfg = Part.query.filter_by(id=part_id).first().manufacturer
+        mfg = Part.query.filter_by(id=id).first().manufacturer
         if mfg:
             return 'edit manufacturer %s %s' % (mfg.name, mfg.pn)
         else:
@@ -173,11 +171,24 @@ def part_manufacturer(part_id=1):
         pass
     abort(404)
 
+@app.route('/u/')
+@app.route('/users/')
+def users():
+    users = User.query
+    return render_template('user_list.html', title='Users', users=users)
+
 @app.route('/u/<username>')
 def user(username):
     u = User.query.filter_by(name=username).first()
     if u:
-        return render_template('user.html', user=u)
+        return render_template('user_profile.html', title=u.real_name, user=u)
+    abort(404)
+
+@app.route('/u/<username>/edit')
+def edit_user(username):
+    u = User.query.filter_by(name=username).first()
+    if u:
+        return render_template('edit_user.html', title='Edit Profile', user=u)
     abort(404)
 
 @app.errorhandler(404)
@@ -188,78 +199,3 @@ def not_found_error(error):
 def internal_error(error):
     db.session.rollback()
     return render_template('500.html'), 500
-
-@app.template_filter()
-def friendly_time(dt, past_="ago",
-    future_="from now",
-    default="just now"):
-    """
-    Returns string representing "time since"
-    or "time until" e.g.
-    3 days ago, 5 hours from now etc.
-    """
-
-    now = datetime.utcnow()
-    if now > dt:
-        diff = now - dt
-        dt_is_past = True
-    else:
-        diff = dt - now
-        dt_is_past = False
-
-    periods = (
-        (diff.days / 365, "year", "years"),
-        (diff.days / 30, "month", "months"),
-        (diff.days / 7, "week", "weeks"),
-        (diff.days, "day", "days"),
-        (diff.seconds / 3600, "hour", "hours"),
-        (diff.seconds / 60, "minute", "minutes"),
-        (diff.seconds, "second", "seconds"),
-    )
-
-    for period, singular, plural in periods:
-
-        if period:
-            return "%d %s %s" % (period, \
-                singular if period == 1 else plural, \
-                past_ if dt_is_past else future_)
-
-    return default
-
-@app.template_filter()
-def to_si(d, units=''):
-    inc_prefixes = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
-    dec_prefixes = ['m', 'u', 'n', 'p', 'f', 'a', 'z', 'y']
-
-    degree = int(math.floor(math.log10(math.fabs(d)) / 3))
-
-    prefix = ''
-
-    if degree != 0:
-        ds = degree / math.fabs(degree)
-        if ds == 1:
-            if degree - 1 < len(inc_prefixes):
-                prefix = inc_prefixes[degree - 1]
-            else:
-                prefix = inc_prefixes[-1]
-                degree = len(inc_prefixes)
-
-        elif ds == -1:
-            if -degree - 1 < len(dec_prefixes):
-                prefix = dec_prefixes[-degree - 1]
-            else:
-                prefix = dec_prefixes[-1]
-                degree = -len(dec_prefixes)
-
-        scaled = float(d * math.pow(1000, -degree))
-
-        s = "{scaled}{prefix}{u}".format(scaled=scaled, prefix=prefix, u=units)
-
-    else:
-        s = "{d}{u}".format(d=d, u=units)
-
-    return(s)
-
-@app.template_filter()
-def pretty_percent(n):
-    return '{:.3%}'.format(n)
