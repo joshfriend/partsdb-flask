@@ -31,11 +31,19 @@
     </tr>
     <tr>
       <td>Manufacturer</td>
-      <td>{{part.manufacturer.name}}</td>
+      {% if part.manufacturer %}
+      <td>{{part.manufacturer}}</td>
+      {% else %}
+      <td>Unknown</td>
+      {% endif %}
     </tr>
     <tr>
       <td>Manufacturer PN</td>
-      <td>{{part.manufacturer.pn}}</td>
+      {% if part.manufacturer_pn %}
+      <td>{{part.manufacturer_pn}}</td>
+      {% else %}
+      <td>Unknown</td>
+      {% endif %}
     </tr>
     {% block properties %}{% endblock %}
   </tbody>

@@ -171,6 +171,29 @@ def part_manufacturer(id=1):
         pass
     abort(404)
 
+@app.route('/doc/')
+def documents():
+    docs = Document.query
+    return 'All documents...'
+
+@app.route('/doc/<int:id>')
+def document(id=0):
+    d = Document.query.filter_by(id=id)
+    if d:
+        return "%s: %s" % (d.title, d.path)
+    abort(404)
+
+@app.route('/doc/<int:id>/edit')
+def document(id=0):
+    d = Document.query.filter_by(id=id)
+    if d:
+        return "edit document '%s': %s" % (d.title, d.path)
+    abort(404)
+
+@app.route('/doc/new')
+def new_document():
+    return "New document"
+
 @app.route('/u/')
 @app.route('/users/')
 def users():

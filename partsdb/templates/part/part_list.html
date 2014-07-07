@@ -27,10 +27,13 @@
       </td>
       <td>{{part.type}}</td>
       {% if part.manufacturer %}
-      <td>{{part.manufacturer.name}}</td>
-      <td>{{part.manufacturer.pn}}</td>
+      <td>{{part.manufacturer}}</td>
       {% else %}
       <td>Unknown</td>
+      {% endif %}
+      {% if part.manufacturer_pn %}
+      <td>{{part.manufacturer_pn}}</td>
+      {% else %}
       <td>Unknown</td>
       {% endif %}
       {% if part.created %}
@@ -48,15 +51,7 @@
       <td>Unknown</td>
       {% endif %}
       <td>
-        <a class="btn btn-success btn-xs" href={{url_for('part', id=part.id)}}>
-          <i class="fa fa-folder-open-o" title="View"> View</i>
-        </a>
-        <a class="btn btn-default btn-xs" href={{url_for('edit_part', id=part.id)}}>
-          <i class="fa fa-pencil-square-o" title="Edit"> Edit</i>
-        </a>
-        <a class="btn btn-danger btn-xs">
-          <i class="fa fa-trash-o" title="Delete"> Delete</i>
-        </a>
+        {% include 'part/part_actions.html' %}
       </td>
     </tr>
     {% endfor %}

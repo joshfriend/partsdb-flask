@@ -24,10 +24,20 @@ sym_associations = db.Table('sym_associations',
     db.Column('sym_id', db.Integer, db.ForeignKey('symbol.id'))
 )
 
+# Table holds associations between a part and a symbol
+# Allows multiple parts to link to a single symbol
+doc_associations = db.Table('doc_associations',
+    db.Column('part_id', db.Integer, db.ForeignKey('part.id')),
+    db.Column('doc_id', db.Integer, db.ForeignKey('document.id'))
+)
+
 class Part(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(32), nullable=False)
+    manufacturer = db.Column(db.String(64))
+    manufacturer_pn = db.Column(db.String(64), unique=True, index=True)
     created = db.Column(db.DateTime)
+    last_modified = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), default=0)
 
     # Relationships
@@ -39,10 +49,6 @@ class Part(db.Model):
                               uselist=True,
                               backref='part',
                               lazy='dynamic')
-    manufacturer = db.relationship('Manufacturer',
-                                   uselist=False,
-                                   backref='part',
-                                   lazy='joined')
     footprints = db.relationship('Footprint',
                                  secondary=fp_associations,
                                  backref=db.backref('parts', lazy='dynamic'),
@@ -51,6 +57,10 @@ class Part(db.Model):
                               secondary=sym_associations,
                               backref=db.backref('parts', lazy='dynamic'),
                               lazy='dynamic')
+    docs = db.relationship('Document',
+                           secondary=doc_associations,
+                           backref=db.backref('parts', lazy='dynamic'),
+                           lazy='dynamic')
 
     __tablename__ = 'part'
     __mapper_args__ = {'polymorphic_on': type}
@@ -175,14 +185,22 @@ class Vendor(db.Model):
         return '<%s: %s %s>' % (self.__class__.__name__, self.name, self.pn)
 
 
-class Manufacturer(db.Model):
+# class Manufacturer(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     part_id = db.Column(db.Integer, db.ForeignKey('part.id'))
+#     name = db.Column(db.String(64))
+#     pn = db.Column(db.String(64))
+
+#     def __repr__(self):
+#         return '<%s: %s %s>' % (self.__class__.__name__, self.name, self.pn)
+
+class Document(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    part_id = db.Column(db.Integer, db.ForeignKey('part.id'))
-    name = db.Column(db.String(64))
-    pn = db.Column(db.String(64))
+    title = db.Column(db.String(64))
+    path = db.Column(db.String, unique=True)
 
     def __repr__(self):
-        return '<%s: %s %s>' % (self.__class__.__name__, self.name, self.pn)
+        return '<%s: %s>' % (self.__class__.__name__, self.title)
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
