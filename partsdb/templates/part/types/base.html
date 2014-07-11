@@ -26,7 +26,7 @@
       {% if part.created %}
       <td>{{part.created | friendly_time}}</td>
       {% else %}
-      <td>Unknown</td>
+      <td><div class="text-muted">Unknown</div></td>
       {% endif %}
     </tr>
     <tr>
@@ -34,7 +34,7 @@
       {% if part.last_modified %}
       <td>{{part.last_modified | friendly_time}}</td>
       {% else %}
-      <td>Unknown</td>
+      <td><div class="text-muted">Unknown</div></td>
       {% endif %}
     </tr>
     <tr>
@@ -42,7 +42,7 @@
       {% if part.manufacturer %}
       <td>{{part.manufacturer}}</td>
       {% else %}
-      <td>Unknown</td>
+      <td><div class="text-muted">Unknown</div></td>
       {% endif %}
     </tr>
     <tr>
@@ -50,7 +50,7 @@
       {% if part.manufacturer_pn %}
       <td>{{part.manufacturer_pn}}</td>
       {% else %}
-      <td>Unknown</td>
+      <td><div class="text-muted">Unknown</div></td>
       {% endif %}
     </tr>
     {% block properties %}{% endblock %}
