@@ -100,6 +100,7 @@ class PolarizedCapacitor(Part):
 class IC(Part):
     id = db.Column(db.Integer, db.ForeignKey('part.id'), primary_key=True)
     value = db.Column(db.String(64), default='')
+    description = db.Column(db.String(128), default='')
     pin_count = db.Column(db.Integer)
     __tablename__ = 'ic'
     __mapper_args__ = {'polymorphic_identity': __tablename__}
@@ -132,19 +133,19 @@ class Symbol(db.Model):
 
 class MentorSymbol(Symbol):
     id = db.Column(db.Integer, db.ForeignKey('symbol.id'), primary_key=True)
-    name = db.Column(db.String(256))
+    name = db.Column(db.String(256), unique=True)
     __mapper_args__ = {'polymorphic_identity': MENTOR}
 
 
 class CadenceSymbol(Symbol):
     id = db.Column(db.Integer, db.ForeignKey('symbol.id'), primary_key=True)
-    name = db.Column(db.String(256))
+    name = db.Column(db.String(256), unique=True)
     __mapper_args__ = {'polymorphic_identity': CADENCE}
 
 
 class AllegroSymbol(Symbol):
     id = db.Column(db.Integer, db.ForeignKey('symbol.id'), primary_key=True)
-    name = db.Column(db.String(256))
+    name = db.Column(db.String(256), unique=True)
     __mapper_args__ = {'polymorphic_identity': ALLEGRO}
 
 
@@ -159,19 +160,19 @@ class Footprint(db.Model):
 
 class MentorFootprint(Footprint):
     id = db.Column(db.Integer, db.ForeignKey('footprint.id'), primary_key=True)
-    name = db.Column(db.String(256))
+    name = db.Column(db.String(256), unique=True)
     __mapper_args__ = {'polymorphic_identity': MENTOR}
 
 
 class CadenceFootprint(Footprint):
     id = db.Column(db.Integer, db.ForeignKey('footprint.id'), primary_key=True)
-    name = db.Column(db.String(256))
+    name = db.Column(db.String(256), unique=True)
     __mapper_args__ = {'polymorphic_identity': CADENCE}
 
 
 class AllegroFootprint(Footprint):
     id = db.Column(db.Integer, db.ForeignKey('footprint.id'), primary_key=True)
-    name = db.Column(db.String(256))
+    name = db.Column(db.String(256), unique=True)
     __mapper_args__ = {'polymorphic_identity': ALLEGRO}
 
 
@@ -183,16 +184,6 @@ class Vendor(db.Model):
 
     def __repr__(self):
         return '<%s: %s %s>' % (self.__class__.__name__, self.name, self.pn)
-
-
-# class Manufacturer(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     part_id = db.Column(db.Integer, db.ForeignKey('part.id'))
-#     name = db.Column(db.String(64))
-#     pn = db.Column(db.String(64))
-
-#     def __repr__(self):
-#         return '<%s: %s %s>' % (self.__class__.__name__, self.name, self.pn)
 
 class Document(db.Model):
     id = db.Column(db.Integer, primary_key=True)
