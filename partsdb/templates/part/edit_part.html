@@ -1,7 +1,31 @@
-<!-- extend base layout -->
-{% extends "base.html" %}
-
-{% block content %}
-<h1>Edit {{part}}</h1>
-{% include 'flash.html' %}
-{% endblock %}
+<div class="modal fade" id="edit_part" tabindex="-1" role="dialog" aria-labelledby="edit_part" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Edit Part</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" action="{{url_for('part', id=part.id)}}" method="post" name="edit">
+          {{ form.hidden_tag() }}
+          <table class="table table-striped">
+            <thead>
+            </thead>
+            <tbody>
+              {% for field in form if field.widget.input_type != 'hidden' %}
+              <tr>
+              <th>{{ field.label }}</th>
+              <td>{{ field }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input class="btn btn-primary" type="submit" value="Save">
+      </div>
+    </div>
+  </div>
+</div>

@@ -12,6 +12,7 @@
       <th>Manufacturer</th>
       <th>Manufacturer PN</th>
       <th>Created</th>
+      <th>Last Modified</th>
       <th>Author</th>
       <th>Actions</th>
     </tr>
@@ -38,6 +39,11 @@
       {% endif %}
       {% if part.created %}
       <td>{{part.created | friendly_time}}</td>
+      {% else %}
+      <td>Unknown</td>
+      {% endif %}
+      {% if part.last_modified %}
+      <td>{{part.last_modified | friendly_time}}</td>
       {% else %}
       <td>Unknown</td>
       {% endif %}

@@ -1,0 +1,37 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+{% include 'flash.html' %}
+{% if footprints %}
+<table class="table table-striped table-hover ">
+  <thead>
+    <tr>
+      <th>ID#</th>
+      <th>Type</th>
+      <th>Name</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for footprint in footprints %}
+    <tr>
+      <td>
+        <label>
+          <input type="checkbox">
+        </label>
+        {{footprint.id}}
+      </td>
+      <td>{{footprint.type}}</td>
+      <td>{{footprint.name}}</td>
+      <td>
+        {% include 'footprint/footprint_actions.html' %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+There are no footprints in this database! You can add a new footprint <a href={{url_for('new_footprint')}}>here.</a>
+{% endif %}
+{% endblock %}

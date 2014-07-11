@@ -30,6 +30,14 @@
       {% endif %}
     </tr>
     <tr>
+      <td>Last Modified</td>
+      {% if part.last_modified %}
+      <td>{{part.last_modified | friendly_time}}</td>
+      {% else %}
+      <td>Unknown</td>
+      {% endif %}
+    </tr>
+    <tr>
       <td>Manufacturer</td>
       {% if part.manufacturer %}
       <td>{{part.manufacturer}}</td>

@@ -3,4 +3,20 @@
 
 {% block content %}
 <h1>Welcome to PartsDB!</h1>
+
+<h3>Quick stats:</h3>
+<ul class="list-group">
+  <li class="list-group-item">
+    <span class="badge">{{parts}}</span>
+    <a href={{url_for('parts')}}>Parts</a>
+  </li>
+  <li class="list-group-item">
+    <span class="badge">{{footprints}}</span>
+    <a href={{url_for('footprints')}}>Footprints</a>
+  </li>
+  <li class="list-group-item">
+    <span class="badge">{{symbols}}</span>
+    <a href={{url_for('symbols')}}>Symbols</a>
+  </li>
+</ul>
 {% endblock %}
