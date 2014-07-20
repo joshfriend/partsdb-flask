@@ -1,4 +1,4 @@
-#!env/bin/python
+#!/usr/bin/env python
 
 from datetime import datetime
 from partsdb import db

@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from partsdb import app, db
 from hashlib import md5
 
